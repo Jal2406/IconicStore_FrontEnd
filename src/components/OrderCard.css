@@ -1,0 +1,107 @@
+/* OrderCard - Modern Card Style (inspired by productCard.css)
+   Place in same folder as OrderCard.js */
+
+.order-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  background: #fff;
+  box-shadow: 0 4px 24px rgba(67,97,238,0.10);
+  transition: transform 0.25s, box-shadow 0.25s, background 0.25s;
+  border: none;
+  margin-bottom: 2rem;
+}
+.order-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.16);
+  background: rgba(255,255,255,0.98);
+}
+.order-card-header {
+  background: linear-gradient(90deg, #e0e7ff 0%, #f1f5ff 100%);
+  padding: 1.25rem 1.5rem 1rem 1.5rem;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.order-card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #222;
+  letter-spacing: 0.2px;
+}
+.order-card-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.98rem;
+  font-weight: 500;
+  border-radius: 1rem;
+  padding: 0.3rem 1rem;
+  background: #f3f4f6;
+  color: #555;
+  text-transform: capitalize;
+}
+.order-card-body {
+  padding: 1.5rem 1.5rem 1rem 1.5rem;
+}
+.order-card-address {
+  font-size: 0.97rem;
+  color: #555;
+  margin-bottom: 1.2rem;
+  background: #f8f9fa;
+  border-radius: 0.75rem;
+  padding: 0.7rem 1rem;
+}
+.order-card-products {
+  margin-bottom: 1.2rem;
+}
+.order-card-product-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #f9f9fb;
+  border-radius: 0.7rem;
+  padding: 0.7rem 1rem;
+  margin-bottom: 0.7rem;
+  box-shadow: 0 1px 4px rgba(67,97,238,0.04);
+}
+.order-card-product-name {
+  font-weight: 500;
+  color: #222;
+  font-size: 1rem;
+}
+.order-card-product-qty {
+  color: #888;
+  font-size: 0.95rem;
+}
+.order-card-product-price {
+  color: #4361ee;
+  font-weight: 600;
+  font-size: 1rem;
+}
+.order-card-summary {
+  border-top: 1px solid #f0f0f0;
+  margin-top: 1.2rem;
+  padding-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.05rem;
+  color: #333;
+}
+.order-card-expand-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #4361ee;
+  background: none;
+  border: none;
+  font-weight: 500;
+  font-size: 1rem;
+  margin: 0.5rem auto 0 auto;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.order-card-expand-btn:hover {
+  color: #3a0ca3;
+}

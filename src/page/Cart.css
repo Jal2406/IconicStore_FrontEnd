@@ -1,0 +1,5 @@
+.container.mt-5 {
+  margin-top: 6rem !important; /* Increased top margin to account for navbar height */
+  padding-top: 1rem;
+}
+

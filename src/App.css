@@ -13,6 +13,8 @@
   }
 }
 
+
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -36,3 +38,32 @@
     transform: rotate(360deg);
   }
 }
+
+.navbar .nav-link {
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.navbar .nav-link:hover {
+  color: #0d6efd; /* Bootstrap Primary */
+  text-decoration: underline;
+}
+
+.navbar-brand span {
+  font-weight: 700;
+}
+.hero-section {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  animation: fadeIn 1s ease-in-out both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+footer a:hover {
+  color: #0d6efd !important;
+  text-decoration: underline;
+}
+

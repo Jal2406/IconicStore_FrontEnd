@@ -1,0 +1,96 @@
+.collapsible-search-bar {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 999px;
+  border: 2px solid #3a0ca3; /* subtle indigo border for admin */
+  padding: 0.4rem 0.75rem;
+  max-width: 42px;
+  background-color: #f6f8fa; /* subtle light background for admin */
+  transition: all 0.3s cubic-bezier(.4,0,.2,1);
+  height: 40px;
+}
+
+.collapsible-search-bar.expanded {
+  max-width: 280px;
+  background: #e9ecef;
+  border-color: #4361ee;
+}
+
+.collapsible-search-bar.expanded:focus-within {
+  box-shadow: 0 0 8px rgba(67,97,238,0.12);
+}
+
+.search-form {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.search-icon {
+  font-size: 1.2rem;
+  color: #3a0ca3;
+  cursor: pointer;
+  min-width: 24px;
+  height: 24px;
+  transition: color 0.2s;
+}
+.search-icon:hover {
+  color: #4361ee;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 1rem;
+  color: #222;
+}
+
+.collapsible-search-bar-admin {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border: none;
+  background: none;
+  border-radius: 0;
+  padding: 0;
+  max-width: 28px;
+  height: 32px;
+  transition: max-width 0.3s cubic-bezier(.4,0,.2,1);
+}
+
+.collapsible-search-bar-admin.expanded {
+  max-width: 180px;
+}
+
+.search-icon-admin {
+  font-size: 1.25rem;
+  color: #3a0ca3;
+  stroke-width: 1.2;
+  cursor: pointer;
+  min-width: 24px;
+  margin-top: 1px;
+  font-weight: 400;
+  background: none;
+  border: none;
+  transition: color 0.2s;
+}
+
+.search-icon-admin:hover {
+  color: #4361ee;
+}
+
+.search-input-admin {
+  border: none;
+  outline: none;
+  background: none;
+  font-size: 1rem;
+  color: #222;
+  font-weight: 400;
+  padding: 0;
+  margin-left: 2px;
+  min-width: 0;
+  flex: 1;
+}
