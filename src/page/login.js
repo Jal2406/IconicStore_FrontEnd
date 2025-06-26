@@ -45,8 +45,6 @@ const Login = ({ onUserUpdate }) => {
 
   const handleGoogleLogin = async () => {
     window.location.href = `${API}/auth/google`
-   
-    
   }
   return (
     <div

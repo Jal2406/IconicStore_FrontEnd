@@ -63,6 +63,10 @@ const Signup = ({ onUserUpdate }) => {
     }
   };
 
+  const handleGoogle = async () => {
+    window.location.href = `${API}/auth/google`
+  }
+
   return (
     <div
       className="container d-flex flex-column align-items-center justify-content-center"
@@ -172,7 +176,7 @@ const Signup = ({ onUserUpdate }) => {
             type="button"
             className="btn btn-outline-danger w-100 mt-3 d-flex align-items-center justify-content-center gap-2"
             style={{ borderRadius: "8px", fontWeight: 500 }}
-            onClick={() => alert('Google Login coming soon!')}
+            onClick={handleGoogle}
           >
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 48 48">
             <g>
