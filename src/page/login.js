@@ -44,7 +44,7 @@ const Login = ({ onUserUpdate }) => {
   };
 
   const handleGoogleLogin = async () => {
-    window.location.href = "http://localhost:3000/auth/google"
+    window.location.href = `${API}/auth/google`
    
     
   }
