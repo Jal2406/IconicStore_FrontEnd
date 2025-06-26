@@ -4,7 +4,8 @@ import React, { useState, useEffect } from "react";
 // import { toast } from "react-toastify";
 import toast from "react-hot-toast";
 import { AiOutlineHeart, AiFillHeart, AiOutlineShoppingCart } from "react-icons/ai";
-import "./productCard.css"; 
+import "./productCard.css";
+const API = process.env.REACT_APP_API_URL; 
 
 toast.info = (message) =>
   toast(message, {
@@ -45,7 +46,7 @@ const ProductCard = ({ product, onAddToCart, isWishlisted = false, onRemoveFromW
   const handleAddToCart = async (product) => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/product/addTocart",
+        `${API}/product/addTocart`,
         { productId: product._id },
         {
           headers: {
@@ -74,7 +75,7 @@ const ProductCard = ({ product, onAddToCart, isWishlisted = false, onRemoveFromW
   try {
     if (newWishedStatus) {
       await axios.post(
-        'http://localhost:3000/product/wishlist',
+        `${API}/product/wishlist`,
         { productId: product._id },
         {
           headers: {
@@ -85,7 +86,7 @@ const ProductCard = ({ product, onAddToCart, isWishlisted = false, onRemoveFromW
       );
     } else {
       await axios.delete(
-        'http://localhost:3000/product/wishlist',
+        `${API}/product/wishlist`,
         {
           data: { productId: product._id },
           headers: {

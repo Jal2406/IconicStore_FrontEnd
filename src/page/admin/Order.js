@@ -4,7 +4,7 @@ import axios from "axios";
 // Replace react-toastify with react-hot-toast
 // import { toast } from "react-toastify";
 import toast from "react-hot-toast";
-
+const API = process.env.REACT_APP_API_URL
 const AdminOrders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,7 +12,7 @@ const AdminOrders = () => {
   const fetchOrders = async () => {
     const token = localStorage.getItem("token");
     try {
-      const res = await axios.get("http://localhost:3000/orders", {
+      const res = await axios.get(`${API}:3000/orders`, {
         headers: { Authorization: `${token}` },
       });
       setOrders(res.data);
@@ -37,7 +37,7 @@ const AdminOrders = () => {
     const token = localStorage.getItem("token");
     try {
       await axios.put(
-        `http://localhost:3000/orders/${orderId}/status`,
+        `${API}/${orderId}/status`,
         { status: newStatus },
         { headers: { Authorization: `${token}` } }
       );

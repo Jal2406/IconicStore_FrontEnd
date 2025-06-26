@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import EditProductCard from "./../../components/editProductCard";
 import EditProductModal from "./../../components/editProductModal";
 import axios from "axios";
+const API = process.env.REACT_APP_API_URL
 
 const EditProduct = () => {
   const [products, setProducts] = useState([]);
@@ -11,7 +12,7 @@ const EditProduct = () => {
 
   useEffect(() => {
     const fetchP = async () => {
-      const res = await axios.get('http://localhost:3000/product');
+      const res = await axios.get(`${API}/product`);
     const normalized = res.data.map(p => ({
       ...p,
       id: p._id,

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
+const API = process.env.REACT_APP_API_URL;
 
 const PrivateAdminRoute = ({ children }) => {
   const [loading, setLoading] = useState(true);
@@ -16,7 +17,7 @@ const PrivateAdminRoute = ({ children }) => {
           return;
         }
 
-        const response = await axios.get("http://localhost:3000/login/verify-admin", {
+        const response = await axios.get(`${API}/login/verify-admin`, {
           headers: { Authorization: token },
         });
 

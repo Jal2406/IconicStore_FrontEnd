@@ -6,12 +6,13 @@ const AdminUserManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [editUser, setEditUser] = useState(null);
   const [form, setForm] = useState({ name: '', email: '', role: 'user' });
+  const API = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get('http://localhost:3000/admin/users', {
+        const res = await axios.get(`${API}/admin/users`, {
           headers: { Authorization: token }
         });
 
@@ -42,7 +43,7 @@ const AdminUserManagement = () => {
     if (!confirmDelete) return;
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.delete(`http://localhost:3000/admin/users/${userId}`, {
+      const res = await axios.delete(`${API}/admin/users/${userId}`, {
         headers: { Authorization: token }
       });
       // fetchUsers();

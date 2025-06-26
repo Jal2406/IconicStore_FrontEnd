@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import ProductCard from './productCard';
 import axios from 'axios';
-
+const API = process.env.REACT_APP_API_URL;
 const SearchResults = ({ onAddToCart }) => {
   const location = useLocation();
   const query = new URLSearchParams(location.search).get('filter') || '';
@@ -16,7 +16,7 @@ const SearchResults = ({ onAddToCart }) => {
       setLoading(true);
       setError(null);
       try {
-        const res = await axios.get(`http://localhost:3000/product/search?filter=${query}`);
+        const res = await axios.get(`${API}/product/search?filter=${query}`);
         setProducts(res.data);
       } catch (err) {
         setError('Failed to fetch products.');

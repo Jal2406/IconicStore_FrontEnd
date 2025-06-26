@@ -3,6 +3,7 @@ import { FaStar, FaBoxOpen, FaCheckCircle, FaChartBar, FaTags } from "react-icon
 import { motion } from "framer-motion";
 import { Card } from "../../components/ui/card";
 import axios from "axios";
+const API = process.env.REACT_APP_API_URL;
 
 // Placeholder API functions
 const fetchMostSellingItems = async () => {
@@ -52,7 +53,7 @@ const fetchTopRatedItems = async () => {
 };
 const fetchOrderStats = async () => {
   // TODO: Replace with real API call
-  const res = await axios.get('http://localhost:3000/orders/states', {
+  const res = await axios.get(`${API}/orders/states`, {
     headers: {
       Authorization: localStorage.getItem('token'),
     },

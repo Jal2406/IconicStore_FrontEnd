@@ -70,7 +70,7 @@ const EditProductModal = ({ show, onClose, product, onSave, categories}) => {
 
   try {
     const res = await axios.put(
-      `http://localhost:3000/product/${formData.id}`,{
+      `${API}/${formData.id}`,{
         name: updatedProduct.name,
         category: updatedProduct.category,
         price: updatedProduct.price
