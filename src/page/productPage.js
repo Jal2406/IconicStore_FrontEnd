@@ -16,6 +16,7 @@ const ProductPage = ({ onAddtoCart }) => {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [wishlistIds, setWishlistIds] = useState([]);
   const navigate = useNavigate();
+  const API = process.env.REACT_APP_API_URL;
 
   const scroll = (direction) => {
     if (isScrolling || !scrollRef.current) return;
@@ -63,7 +64,7 @@ const ProductPage = ({ onAddtoCart }) => {
         setIsLoading(true);
         setLoadedProducts([]);
         
-        const res = await axios.get('http://localhost:3000/product');
+        const res = await axios.get(`${API}/product`);
         console.log("Products fetched:", res.data);
         setLoadedProducts(res.data);
       } catch (error) {
@@ -80,7 +81,7 @@ const ProductPage = ({ onAddtoCart }) => {
     const fetchWishlist = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:3000/product/wishlist", {
+        const res = await axios.get(`${API}/product/wishlist`, {
           headers: { Authorization: token },
         });
         const ids = (res.data.products || []).map(item => (item.productId?._id || item._id));

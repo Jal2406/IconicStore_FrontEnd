@@ -152,32 +152,52 @@ const Navbar = () => {
               </form>
             </div>
             <div className="profile-container position-relative" ref={dropdownRef}>
-              <button
+              {/* <button
                 className="profile-btn"
                 onClick={() => setShowProfileDropdown((prev) => !prev)}
                 aria-label="Show profile menu"
               >
                 <FaUserCircle size={24} />
+              </button> */}
+                  {isLoggedIn ? (
+                  showProfileDropdown ? (
+                    <>
+                    <button
+                    className="profile-btn"
+                    onClick={() => setShowProfileDropdown((prev) => !prev)}
+                    aria-label="Show profile menu"
+                    >
+                <FaUserCircle size={24} />
               </button>
-              {showProfileDropdown && (
-                <div className="profile-dropdown end-0 mt-2" style={{right:0, left:'auto', minWidth:280, position:'absolute'}}>
-                  <div className="profile-header">
-                    <img
-                      src="https://via.placeholder.com/40"
-                      alt="Profile"
-                      className="profile-img"
-                    />
-                    <div>
-                      <div className="profile-name">{user?.fname || "User"}</div>
-                      <div className="profile-email text-muted small">{user?.email || ""}</div>
+                    <div className="profile-dropdown end-0 mt-2" style={{ right: 0, left: 'auto', minWidth: 280, position: 'absolute' }}>
+                      <div className="profile-header">
+                        <img
+                          src="https://via.placeholder.com/40"
+                          alt="Profile"
+                          className="profile-img"
+                          />
+                        <div>
+                          <div className="profile-name">{user?.fname || "User"}</div>
+                          <div className="profile-email text-muted small">{user?.email || ""}</div>
+                        </div>
+                      </div>
+                      <NavLink to="/account" className="dropdown-item">My Account</NavLink>
+                      <NavLink to="/wishlist" className="dropdown-item">Wishlist</NavLink>
+                      <hr className="dropdown-divider" />
+                      <button className="dropdown-item logout" onClick={handleLogout}>Logout</button>
                     </div>
-                  </div>
-                  <NavLink to="/account" className="dropdown-item">My Account</NavLink>
-                  <NavLink to="/wishlist" className="dropdown-item">Wishlist</NavLink>
-                  <hr className="dropdown-divider" />
-                  <button className="dropdown-item logout" onClick={handleLogout}>Logout</button>
-                </div>
-              )}
+                    </>
+                  ):(<button
+                    className="profile-btn"
+                    onClick={() => setShowProfileDropdown((prev) => !prev)}
+                    aria-label="Show profile menu"
+                    >
+                    <FaUserCircle size={24} />
+                    </button>
+              )
+                ) : (
+                <NavLink to="/login" className="dropdown-item">Login</NavLink>
+                )}
             </div>
           </div>
         </div>

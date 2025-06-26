@@ -22,6 +22,8 @@ const AddProducts = () => {
   const [color, setColor] = useState("");
   const [size, setSize] = useState("");
   const navigate = useNavigate();
+  const API = process.env.REACT_APP_API_URL;
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,7 +41,7 @@ const AddProducts = () => {
     formData.append("image", image);
 
     try {
-      const res = await axios.post("http://localhost:3000/product", formData, {
+      const res = await axios.post(`${API}/product`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `${localStorage.getItem("token")}`,

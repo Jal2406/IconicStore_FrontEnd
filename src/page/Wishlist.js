@@ -3,7 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import ProductCard from "../components/productCard";
 import "../page/MainProductPage.css";
-
+const API = process.env.REACT_APP_API_URL;
 const Wishlist = () => {
   const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,7 +12,7 @@ const Wishlist = () => {
     const fetchWishlist = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:3000/product/wishlist", {
+        const res = await axios.get(`${API}/product/wishlist`, {
           headers: { Authorization: token },
         });
         setWishlist(res.data.products || []);
@@ -29,7 +29,7 @@ const Wishlist = () => {
   const handleRemoveFromWishlist = async (productId) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.delete("http://localhost:3000/product/wishlist", {
+      await axios.delete(`${API}/product/wishlist`, {
         data: { productId },
         headers: { Authorization: token },
       });

@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+const API = process.env.REACT_APP_API_URL;
 
 const ForgotPass = () => {
     const [email, setEmail] = useState('');
@@ -16,7 +17,7 @@ const ForgotPass = () => {
             return;
         }
         try{
-            const res = axios.post('http://localhost:3000/user/forget-password',
+            const res = axios.post(`${API}/user/forget-password`,
                 { email },
                 { headers: { 'Content-Type': 'application/json' } }     
             )
@@ -56,7 +57,7 @@ const ForgotPass = () => {
         }
 
         try {
-            const res = await axios.post('http://localhost:3000/user/verify-otp', {
+            const res = await axios.post(`${API}/user/verify-otp`, {
                 email,
                 otp: otpString
             }, {

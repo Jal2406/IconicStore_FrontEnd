@@ -2,9 +2,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import "./Cart.css";
 import { motion, AnimatePresence } from "framer-motion";
+import CheckoutInput from "../components/ui/CheckoutInput";
+import {PlaceOrderButton} from "../components/ui/Button";
+
 
 const Cart = ({ onRemoveFromCart }) => {
   const [cartItems, setCartItems] = useState([]);
+  const API = process.env.REACT_APP_API_URL;
   const [showCheckout, setShowCheckout] = useState(false);
   const [address, setAddress] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("cod");
@@ -21,16 +25,17 @@ const Cart = ({ onRemoveFromCart }) => {
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [country, setCountry] = useState("");
-
+  
   const fullAdress = `${flat}, ${area}${landmark ? ", " + landmark : ""}, ${city}, ${state}, ${country} - ${pincode}`;
   // setAddress(fullAdress);
 
   const fetchCart = async () => {
     const token = localStorage.getItem("token");
     try { 
-      const response = await axios.get("http://localhost:3000/product/cart", {
+      const response = await axios.get(`${API}/product/cart`, {
         headers: { Authorization: token }
       });
+      console.log("Cart response data:", response.data);
       const rawItems = response.data.products || [];
       const mappedItems = rawItems.map(item => ({
         id: item.productId._id,
@@ -40,6 +45,7 @@ const Cart = ({ onRemoveFromCart }) => {
         quantity: item.quantity
       }));
       setCartItems(mappedItems);
+
     } catch (err) {
       console.error("Failed to fetch cart", err);
     }
@@ -54,7 +60,7 @@ const Cart = ({ onRemoveFromCart }) => {
   const removeItem = async (productId) => {
     const token = localStorage.getItem("token");
     try {
-      await axios.delete(`http://localhost:3000/product/cart/${productId}`, {
+      await axios.delete(`${API}/product/cart/${productId}`, {
         headers: { Authorization: token }
       });
       fetchCart();
@@ -74,7 +80,7 @@ const Cart = ({ onRemoveFromCart }) => {
     const token = localStorage.getItem("token");
     try {
       await axios.post(
-        "http://localhost:3000/product/checkout",
+        `${API}/product/checkout`,
         {
           name,
           phone,
@@ -112,7 +118,7 @@ const Cart = ({ onRemoveFromCart }) => {
     try {
       // Razorpay expects amount in paise, so multiply by 100 here
       const response = await axios.post(
-        "http://localhost:3000/payment/create-order",
+        `${API}/payment/create-order`,
         {
           amount: parseInt(getTotal() * 100), // INR to paise
           currency: "INR",
@@ -132,7 +138,7 @@ const Cart = ({ onRemoveFromCart }) => {
         handler: async (response) => {
   try {
         const verificationResponse = await axios.post(
-          "http://localhost:3000/payment/verify-payment",
+          `${API}/payment/verify-payment`,
           {
             razorpay_order_id: response.razorpay_order_id,
             razorpay_payment_id: response.razorpay_payment_id,
@@ -259,109 +265,38 @@ const Cart = ({ onRemoveFromCart }) => {
                 <div className="modal-body pt-0">
                   <div className="row">
                     <div className="col-md-6 mb-3">
-                      <label className="form-label fw-semibold">Full Name <span className="text-danger">*</span></label>
-                      <input
-                        className="form-control rounded-3 shadow-sm"
-                        value={name}
-                        onChange={e => setName(e.target.value)}
-                        placeholder="Enter your name"
-                        required
-                      />
+                      <CheckoutInput lable={'Full Name'} value={name} placeholder={'Enter your Name'} onChange={(e) => {setName(e.target.value)}} required={true}/>
                     </div>
                     <div className="col-md-6 mb-3">
-                      <label className="form-label fw-semibold">Phone Number <span className="text-danger">*</span></label>
-                      <input
-                        className="form-control rounded-3 shadow-sm"
-                        value={phone}
-                        onChange={e => setPhone(e.target.value)}
-                        placeholder="Enter your phone number"
-                        type="tel"
-                        required
-                      />
+                      <CheckoutInput lable={'Phone Number'} value={phone} placeholder={'Enter your Phone Number'} onChange={(e) => {setPhone(e.target.value)}} required={true}/>
                     </div>
                   </div>
                   <div className="mb-3">
-                    <label className="form-label fw-semibold">Email <span className="text-danger">*</span></label>
-                    <input
-                      className="form-control rounded-3 shadow-sm"
-                      value={email}
-                      onChange={e => setEmail(e.target.value)}
-                      placeholder="Enter your email"
-                      type="email"
-                      required
-                    />
+                    <CheckoutInput lable={'Email'} value={email} placeholder={'Enter your Email'} onChange={(e) => {setEmail(e.target.value)}} required={true}/>
                   </div>
                   <div className="mb-3">
-                    <label className="form-label fw-semibold">Flat No. / Apt Name <span className="text-danger">*</span></label>
-                    <input
-                      className="form-control rounded-3 shadow-sm"
-                      value={flat}
-                      onChange={e => setFlat(e.target.value)}
-                      placeholder="Flat No. / Apartment Name"
-                      required
-                    />
+                    <CheckoutInput lable={'Area'} value={flat} placeholder={'Flat No./ Apartment Name'} onChange={(e) => {setFlat(e.target.value)}} required={true}/>
                   </div>
                   <div className="mb-3">
-                    <label className="form-label fw-semibold">Area <span className="text-danger">*</span></label>
-                    <input
-                      className="form-control rounded-3 shadow-sm"
-                      value={area}
-                      onChange={e => setArea(e.target.value)}
-                      placeholder="Area / Locality"
-                      required
-                    />
+                    <CheckoutInput lable={'Area'} value={area} placeholder={'Area / Locality'} onChange={(e) => {setArea(e.target.value)}} required={true}/>
                   </div>
                   <div className="mb-3">
-                    <label className="form-label fw-semibold">Landmark <span className="text-muted">(optional)</span></label>
-                    <input
-                      className="form-control rounded-3 shadow-sm"
-                      value={landmark}
-                      onChange={e => setLandmark(e.target.value)}
-                      placeholder="Landmark (optional)"
-                    />
+                    <CheckoutInput lable={'Landmark'} value={landmark} placeholder={'Landmark (Optional)'} onChange={(e) => {setLandmark(e.target.value)}}/>
                   </div>
                   <div className="row">
                     <div className="col-md-6 mb-3">
-                      <label className="form-label fw-semibold">City <span className="text-danger">*</span></label>
-                      <input
-                        className="form-control rounded-3 shadow-sm"
-                        value={city}
-                        onChange={e => setCity(e.target.value)}
-                        placeholder="City"
-                        required
-                      />
+                      <CheckoutInput lable={'City'} value={city} placeholder={'City'} onChange={(e) => {setCity(e.target.value)}} required={true}/>
                     </div>
                     <div className="col-md-6 mb-3">
-                      <label className="form-label fw-semibold">Pincode <span className="text-danger">*</span></label>
-                      <input
-                        className="form-control rounded-3 shadow-sm"
-                        value={pincode}
-                        onChange={e => setPincode(e.target.value)}
-                        placeholder="Pincode"
-                        required
-                      />
+                      <CheckoutInput lable={'Pincode'} value={pincode} placeholder={'Pincode'} onChange={(e) => {setPincode(e.target.value)}} required={true}/>
                     </div>
                   </div>
                   <div className="row">
                     <div className="col-md-6 mb-3">
-                      <label className="form-label fw-semibold">State <span className="text-danger">*</span></label>
-                      <input
-                        className="form-control rounded-3 shadow-sm"
-                        value={state}
-                        onChange={e => setState(e.target.value)}
-                        placeholder="State"
-                        required
-                      />
+                      <CheckoutInput lable={'State'} value={state} placeholder={'State'} onChange={(e) => {setState(e.target.value)}} required={true}/>
                     </div>
                     <div className="col-md-6 mb-3">
-                      <label className="form-label fw-semibold">Country <span className="text-danger">*</span></label>
-                      <input
-                        className="form-control rounded-3 shadow-sm"
-                        value={country}
-                        onChange={e => setCountry(e.target.value)}
-                        placeholder="Country"
-                        required
-                      />
+                      <CheckoutInput lable={'country'} value={country} placeholder={'Country'} onChange={(e) => {setCountry(e.target.value)}} required={true}/>
                     </div>
                   </div>
                   <div className="mb-3">
@@ -375,25 +310,9 @@ const Cart = ({ onRemoveFromCart }) => {
                 <div className="modal-footer border-0 pt-0">
                   <button className="btn btn-outline-secondary rounded-pill px-4" onClick={() => setShowCheckout(false)}>Cancel</button>
                   {paymentMethod === "razorpay" ? (
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.97 }}
-                      className="btn btn-primary rounded-pill px-4"
-                      onClick={handleRazorpayPayment}
-                      disabled={isPlacingOrder}
-                    >
-                      {isPlacingOrder ? "Processing Payment..." : "Pay with Razorpay"}
-                    </motion.button>
-                  ) : 
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.97 }}
-                      className="btn btn-success rounded-pill px-4"
-                      onClick={handleCheckout}
-                      disabled={isPlacingOrder}
-                    >
-                      {isPlacingOrder ? "Placing Order..." : "Place Order"}
-                    </motion.button>
+                    <PlaceOrderButton onClick={handleRazorpayPayment} isPlacingOrder={isPlacingOrder}/>
+                  ) :
+                    <PlaceOrderButton onClick={handleCheckout} isPlacingOrder={isPlacingOrder}/> 
                   }
                 </div>
               </div>

@@ -5,6 +5,8 @@ import axios from 'axios';
 const ResetPassword = () => {
     const location = useLocation();
     const navigate = useNavigate();
+    const API = process.env.REACT_APP_API_URL;
+
     const token = location.state?.token || null; // Ideally passed after OTP verification
 
     const [password, setPassword] = useState('');
@@ -31,7 +33,7 @@ const ResetPassword = () => {
         }
 
         try {
-            const res = await axios.post('http://localhost:3000/user/reset-password', {
+            const res = await axios.post(`${API}/user/reset-password`, {
                 token,
                 newPassword: password
             }, {

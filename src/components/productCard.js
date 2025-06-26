@@ -28,7 +28,8 @@ const ProductCard = ({ product, onAddToCart, isWishlisted = false, onRemoveFromW
 
     // Only call one toast: remove from here, keep in handleAddToCart
     onAddToCart && onAddToCart(product);
-    handleAddToCart(product); // Call the function to add to cart
+    handleAddToCart(product); 
+    console.log(product)// Call the function to add to cart
     // handleAddToCart(product) will show the toast
   };
 

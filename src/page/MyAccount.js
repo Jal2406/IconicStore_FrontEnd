@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+const API = process.env.REACT_APP_API_URL;
 
 const MyAccount = () => {
   const [form, setForm] = useState({
@@ -16,7 +17,7 @@ const MyAccount = () => {
   const fetchProfile = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get("http://localhost:3000/login/profile", {
+      const res = await axios.get(`${API}/login/profile`, {
         headers: { Authorization: token },
       });
       setForm({
@@ -55,7 +56,7 @@ const MyAccount = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      await axios.put("http://localhost:3000/login/profile", form, {
+      await axios.put(`${API}/login/profile`, form, {
         headers: { Authorization: token },
       });
       toast.success("Profile updated");
@@ -78,7 +79,7 @@ const MyAccount = () => {
     }
     try {
       const token = localStorage.getItem("token");
-      await axios.put("http://localhost:3000/login/change-password", {
+      await axios.put(`${API}/login/change-password`, {
         oldPass: passwords.oldPass,
         newPass: passwords.newPass,
       }, {

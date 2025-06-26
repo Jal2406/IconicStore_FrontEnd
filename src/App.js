@@ -1,6 +1,6 @@
 import './App.css';
 import Navbar from './components/navbar';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import ProductPage from './page/productPage';
 import AddProducts from './page/AddProduct';
 import { useEffect, useState } from 'react';
@@ -35,7 +35,7 @@ import ResetPassword from './page/reset-password';
 
 
 function App() {
-
+  const navigate = useNavigate();
   const [user, setUser] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem("user")) || null;
@@ -44,6 +44,16 @@ function App() {
       return null;
     }
   });
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+
+    if (token) {
+      localStorage.setItem('token', token);
+      navigate('/'); // or wherever you want to send the user
+    }
+  }, []);
 
   // Remove the old toasts state
   // const [toasts, setToasts] = useState([]);
@@ -123,7 +133,6 @@ if (userJSON) {
   return (
 
     <div className="d-flex flex-column min-vh-100">
-      <BrowserRouter>
         {role === "admin" ? <AdminNavbar /> : <Navbar />}
         <div className="flex-grow-1">
           <Routes>
@@ -163,8 +172,8 @@ if (userJSON) {
             <Route
               path="/Products"
               element={
-                        <MainProductPage products={product} onAddtoCart={addToCart} />
-              }
+                <MainProductPage products={product} onAddtoCart={addToCart} />
+                }
             />
             <Route
               path="/addProduct"
@@ -203,7 +212,6 @@ if (userJSON) {
           </Routes>
         </div>
         <Footer />
-      </BrowserRouter>
       {/* Replace ToastContainer with our CustomToaster */}
       <CustomToaster />
     </div>

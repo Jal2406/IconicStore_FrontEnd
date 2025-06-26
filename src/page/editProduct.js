@@ -7,11 +7,12 @@ const EditProduct = () => {
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  
+  const API = process.env.REACT_APP_API_URL;
+
 
   useEffect(() => {
     const fetchP = async () => {
-      const res = await axios.get('http://localhost:3000/product');
+      const res = await axios.get(`${API}/product`);
     const normalized = res.data.map(p => ({
       ...p,
       id: p._id,
@@ -20,6 +21,8 @@ const EditProduct = () => {
     }
     fetchP();
   }, []);
+
+  const categories = Array.from(new Set(products.map(p => p.category)));  
 
   // Open modal with selected product
   const handleEditClick = (product) => {
@@ -50,7 +53,7 @@ const EditProduct = () => {
         {products.length > 0 ? (
           products.map((product) => (
             <div className="col" key={product.id}>
-              <EditProductCard product={product} onEdit={handleEditClick} />
+              <EditProductCard product={product} categories={categories} onEdit={handleEditClick} />
             </div>
           ))
         ) : (

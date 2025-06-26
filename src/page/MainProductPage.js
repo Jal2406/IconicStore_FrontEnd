@@ -17,10 +17,19 @@ const MainProductPage = ({ onAddtoCart }) => {
     category: "All",
     minPrice: 0,
     maxPrice: 100000,
+    subCategory: 'All',
+    size: "All",
+    color: "All",
+    brand: "All"
   });
+  const[subCategories, setSubCategories] = useState([]);
+  const[brands, setBrands] = useState([])
+  const[sizes, setSizes] = useState([])
+  const[colors, setcolors] = useState([])
   const [wishlistIds, setWishlistIds] = useState([]);
   const [searchParams] = useSearchParams();
   const param = searchParams.get("category");
+  const API = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
   if (param) {
@@ -35,11 +44,20 @@ const MainProductPage = ({ onAddtoCart }) => {
     const fetchProducts = async () => {
       try {
         setIsLoading(true);
-        const res = await axios.get("http://localhost:3000/product");
+        const res = await axios.get(`${API}/product`);
         setLoadedProducts(res.data);
         setFilteredProducts(res.data);
         const uniqueCategories = ["All", ...new Set(res.data.map(p => p.category))];
+        const uniqueSize = ["All", ...new Set(res.data.map(p => p.size))];
+        const uniqueBrand = ["All", ...new Set(res.data.map(p => p.brand))];
+        const uniqueColor = ["All", ...new Set(res.data.map(p => p.color))];
+        const uniquesubCategory = ["All", ...new Set(res.data.map(p => p.subCategory))];
         setCategories(uniqueCategories);
+        setBrands(uniqueBrand)
+        setSubCategories(uniquesubCategory)
+        setcolors(uniqueColor)
+        setSizes(uniqueSize)
+        
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {
@@ -54,7 +72,7 @@ const MainProductPage = ({ onAddtoCart }) => {
     const fetchWishlist = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:3000/product/wishlist", {
+        const res = await axios.get(`${API}/product/wishlist`, {
           headers: { Authorization: token },
         });
         const ids = (res.data.products || []).map(item => (item.productId?._id || item._id));
@@ -67,22 +85,43 @@ const MainProductPage = ({ onAddtoCart }) => {
   }, []);
 
   const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters((prev) => ({
-      ...prev,
-      [name]: name.includes("Price") ? Number(value) : value,
-    }));
-    setCurrentPage(1);
-  };
+  const { name, value, type } = e.target;
+
+  let parsedValue = value;
+
+  if (type === "number") {
+    parsedValue = value === "" ? "" : Math.max(0, Number(value));
+  }
+
+  if (typeof parsedValue === "string") {
+    parsedValue = parsedValue.trim();
+    if (parsedValue === "" || parsedValue === "All") {
+      parsedValue = "All";
+    }
+  }
+
+  if (filters[name] === parsedValue) return;
+
+  setFilters((prev) => ({
+    ...prev,
+    [name]: parsedValue,
+  }));
+
+  setCurrentPage(1);
+};
+
 
   useEffect(() => {
   const filtered = loadedProducts.filter((product) => {
     const matchCategory =
       filters.category === "All" || product.category === filters.category;
+    const matchsubCategory = filters.subCategory === "All" || product.subCategory === filters.subCategory
+    const matchBrand = filters.brand === "All" || product.brand === filters.brand
+    const matchsize = filters.size === "All" || product.size === filters.size
     const matchPrice =
       product.price >= filters.minPrice &&
       product.price <= filters.maxPrice;
-    return matchCategory && matchPrice;
+    return matchCategory && matchPrice && matchsubCategory && matchBrand && matchsize;
   });
 
   setFilteredProducts(filtered);
@@ -141,6 +180,74 @@ const MainProductPage = ({ onAddtoCart }) => {
                 placeholder="100000"
               />
             </div>
+            {/* Brand Filter */}
+            <div className="mb-3">
+              <label className="form-label fw-semibold">Brand</label>
+              <select
+                name="brand"
+                value={filters.brand}
+                onChange={handleFilterChange}
+                className="form-select rounded-3 shadow-sm"
+              >
+                {brands.map((brand, idx) => (
+                  <option key={idx} value={brand}>
+                    {brand}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Subcategory Filter */}
+            <div className="mb-3">
+              <label className="form-label fw-semibold">Subcategory</label>
+              <select
+                name="subCategory"
+                value={filters.subCategory}
+                onChange={handleFilterChange}
+                className="form-select rounded-3 shadow-sm"
+              >
+                {subCategories.map((sub, idx) => (
+                  <option key={idx} value={sub}>
+                    {sub}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Color Filter */}
+            <div className="mb-3">
+              <label className="form-label fw-semibold">Color</label>
+              <select
+                name="color"
+                value={filters.color}
+                onChange={handleFilterChange}
+                className="form-select rounded-3 shadow-sm"
+              >
+                {colors.map((color, idx) => (
+                  <option key={idx} value={color}>
+                    {color}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Size Filter */}
+            <div className="mb-3">
+              <label className="form-label fw-semibold">Size</label>
+              <select
+                name="size"
+                value={filters.size}
+                onChange={handleFilterChange}
+                className="form-select rounded-3 shadow-sm"
+              >
+                {sizes.map((size, idx) => (
+                  <option key={idx} value={size}>
+                    {size}
+                  </option>
+                ))}
+              </select>
+            </div>
+
           </div>
         </aside>
         {/* Product Grid */}

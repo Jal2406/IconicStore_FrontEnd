@@ -2,6 +2,8 @@ import React from "react";
 import "./OrderCard.css";
 import { Truck, CheckCircle, Hourglass, MapPin, ShoppingCart } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { OrderStatusButton } from "./ui/Button";
+import OrderDes from "./orderDes";
 
 const statusIcons = {
   pending: <Hourglass className="text-yellow-500" />,
@@ -30,14 +32,7 @@ const OrderCard = ({ order }) => {
       {/* Header Section */}
       <div className="order-card-header">
         <div className="order-card-title">Order #{order._id.slice(-6)}</div>
-        <button
-          className="order-card-status"
-          style={statusColors[order.status]}
-          onClick={() => setIsExpanded((v) => !v)}
-        >
-          {statusIcons[order.status]}
-          <span>{order.status}</span>
-        </button>
+        <OrderStatusButton statusColors={statusColors} onClick={() => setIsExpanded((v) => !v)} status={order.status} statusIcons={statusIcons}/>
       </div>
       {/* Main Content */}
       <div className="order-card-body">
@@ -47,15 +42,7 @@ const OrderCard = ({ order }) => {
           {order.address}
         </div>
         {/* Products Section */}
-        <div className="order-card-products">
-          {order.products.map((item) => (
-            <div className="order-card-product-item" key={item._id}>
-              <div className="order-card-product-name">{item.productId.name}</div>
-              <div className="order-card-product-qty">Qty: <b>{item.quantity}</b></div>
-              <div className="order-card-product-price">₹{item.productId.price.toLocaleString()}</div>
-            </div>
-          ))}
-        </div>
+        <OrderDes order={order}/>
         {/* Order Summary (expandable) */}
         <AnimatePresence>
           {isExpanded && (
@@ -71,7 +58,6 @@ const OrderCard = ({ order }) => {
             </motion.div>
           )}
         </AnimatePresence>
-        {/* Expand/Collapse Button */}
         <button
           className="order-card-expand-btn"
           onClick={() => setIsExpanded((v) => !v)}

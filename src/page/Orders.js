@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { Package, History, Truck, XCircle } from "lucide-react";
 import axios from "axios";
 import "../components/OrderCard.css";
+const API = process.env.REACT_APP_API_URL;
+
 
 const Orders = () => {
     const [orders, setOrders] = useState([]);
@@ -14,12 +16,13 @@ const Orders = () => {
     const fetchOrders = async () => {
         try {
             setLoading(true);
-            const res = await axios.get('http://localhost:3000/orders/userOrders', {
+            const res = await axios.get(`${API}/orders/userOrders`, {
                 headers: {
                     Authorization: localStorage.getItem('token')
                 }
             });
             setOrders(res.data);
+            console.log(res.data)
             setError(null);
         } catch (err) {
             setError("Failed to fetch orders. Please try again later.");
