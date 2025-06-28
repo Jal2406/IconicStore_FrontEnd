@@ -2,8 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
 import { FaUserCircle, FaBars, FaTimes } from "react-icons/fa";
 import { AiOutlineSearch } from "react-icons/ai";
+import axios from "axios";
 import "../navbar.css";
 import "./AdminNav.css";
+import { useAuth } from "../AuthContext";
 
 const AdminNavbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -11,21 +13,11 @@ const AdminNavbar = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true)
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
   const searchInputRef = useRef(null);
-
-  // Parse user data safely
-  const user = (() => {
-    try {
-      const stored = localStorage.getItem("user");
-      return stored ? JSON.parse(stored) : null;
-    } catch {
-      return null;
-    }
-  })();
-  const role = user?.role || null;
-  const username = user?.fname || "Admin";
+  const {user, role} = useAuth()
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -73,10 +65,22 @@ const AdminNavbar = () => {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    navigate("/login");
+  const handleLogout = async() => {
+    try {
+      const res = await axios.delete(`${process.env.REACT_APP_API_URL}/login`,{
+        withCredentials:true
+      })
+      if(res.status === 200) {
+        setIsLoggedIn(false);
+        setShowProfileDropdown(false);
+        navigate("/login");
+      }
+      else{
+        console.log("Problem Logging Out")
+      }
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   const toggleSearch = () => {
@@ -207,7 +211,7 @@ const AdminNavbar = () => {
                       className="profile-img"
                     />
                     <div>
-                      <div className="profile-name">{username}</div>
+                      <div className="profile-name">{user.fname}</div>
                       <div className="profile-email">admin</div>
                     </div>
                   </div>

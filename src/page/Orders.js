@@ -16,11 +16,9 @@ const Orders = () => {
     const fetchOrders = async () => {
         try {
             setLoading(true);
-            const res = await axios.get(`${API}/orders/userOrders`, {
-                headers: {
-                    Authorization: localStorage.getItem('token')
-                }
-            });
+            const res = await axios.get(`${API}/orders/userOrders`,{
+      withCredentials:true
+    });
             setOrders(res.data);
             console.log(res.data)
             setError(null);

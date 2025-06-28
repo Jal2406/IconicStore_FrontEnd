@@ -41,12 +41,9 @@ const AddProducts = () => {
     formData.append("image", image);
 
     try {
-      const res = await axios.post(`${API}/product`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `${localStorage.getItem("token")}`,
-        },
-      });
+      const res = await axios.post(`${API}/product`, formData,{
+      withCredentials:true
+    });
 
       if (res.status === 201) {
         alert("Product added successfully");

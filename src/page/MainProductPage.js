@@ -72,9 +72,9 @@ const MainProductPage = ({ onAddtoCart }) => {
     const fetchWishlist = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get(`${API}/product/wishlist`, {
-          headers: { Authorization: token },
-        });
+        const res = await axios.get(`${API}/product/wishlist`,{
+      withCredentials:true
+    });
         const ids = (res.data.products || []).map(item => (item.productId?._id || item._id));
         setWishlistIds(ids);
       } catch (err) {

@@ -30,11 +30,10 @@ const Cart = ({ onRemoveFromCart }) => {
   // setAddress(fullAdress);
 
   const fetchCart = async () => {
-    const token = localStorage.getItem("token");
     try { 
-      const response = await axios.get(`${API}/product/cart`, {
-        headers: { Authorization: token }
-      });
+      const response = await axios.get(`${API}/product/cart`,{
+      withCredentials:true
+    });
       console.log("Cart response data:", response.data);
       const rawItems = response.data.products || [];
       const mappedItems = rawItems.map(item => ({
@@ -58,11 +57,10 @@ const Cart = ({ onRemoveFromCart }) => {
   const getTotal = () => cartItems.reduce((t, item) => t + item.price * item.quantity, 0);
 
   const removeItem = async (productId) => {
-    const token = localStorage.getItem("token");
     try {
-      await axios.delete(`${API}/product/cart/${productId}`, {
-        headers: { Authorization: token }
-      });
+      await axios.delete(`${API}/product/cart/${productId}`,{
+      withCredentials:true
+    });
       fetchCart();
     } catch (err) {
       console.error("Failed to remove item", err);
@@ -77,7 +75,6 @@ const Cart = ({ onRemoveFromCart }) => {
     // Compose address string for backend compatibility
     const addressString = `${flat}, ${area}${landmark ? ", " + landmark : ""}, ${city}, ${state}, ${country} - ${pincode}`;
     setIsPlacingOrder(true);
-    const token = localStorage.getItem("token");
     try {
       await axios.post(
         `${API}/product/checkout`,
@@ -92,14 +89,11 @@ const Cart = ({ onRemoveFromCart }) => {
             quantity: item.quantity
           })),
           totalAmount: getTotal()
-        },
-        {
-          headers: {
-            Authorization: token,
-            "Content-Type": "application/json"
-          }
-        }
-      );
+        },{
+      withCredentials:true
+    }
+    );
+    
       alert("Order placed successfully!");
       setCartItems([]);
       setShowCheckout(false);
@@ -114,7 +108,7 @@ const Cart = ({ onRemoveFromCart }) => {
   };
 
   const handleRazorpayPayment = async () => {
-    const token = localStorage.getItem("token");
+    
     try {
       // Razorpay expects amount in paise, so multiply by 100 here
       const response = await axios.post(
@@ -123,10 +117,9 @@ const Cart = ({ onRemoveFromCart }) => {
           amount: parseInt(getTotal() * 100), // INR to paise
           currency: "INR",
           receipt: `receipt_${Date.now()}`
-        },
-        {
-          headers: { Authorization: token }
-        }
+        },{
+      withCredentials:true
+    }
       );
       const options = {
         key: "rzp_test_JVB6uyPjz1CHAi",
@@ -149,10 +142,9 @@ const Cart = ({ onRemoveFromCart }) => {
               productId: item.id,
               quantity: item.quantity
             })),
-          },
-          {
-            headers: { Authorization: token }
-          }
+          },{
+      withCredentials:true
+    }
         );
         alert("Order placed successfully!");
         setCartItems([]);

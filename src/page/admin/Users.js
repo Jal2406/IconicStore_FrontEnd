@@ -11,10 +11,10 @@ const AdminUserManagement = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const res = await axios.get(`${API}/admin/users`, {
-          headers: { Authorization: token }
-        });
+        
+        const res = await axios.get(`${API}/admin/users`,{
+      withCredentials:true
+    });
 
         console.log("Fetched from backend:", res.data); // should be an array
         if (Array.isArray(res.data)) {
@@ -42,10 +42,9 @@ const AdminUserManagement = () => {
     const confirmDelete = window.confirm("Are you sure you want to delete this user?");
     if (!confirmDelete) return;
     try {
-      const token = localStorage.getItem('token');
-      const res = await axios.delete(`${API}/admin/users/${userId}`, {
-        headers: { Authorization: token }
-      });
+      const res = await axios.delete(`${API}/admin/users/${userId}`,{
+      withCredentials:true
+    });
       // fetchUsers();
       setUsers(users.filter(user => user._id !== userId));
     } catch (error) {

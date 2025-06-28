@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const API = process.env.REACT_APP_API_URL;
 
 
-const Login = ({ onUserUpdate }) => {
+const Login = () => {
   const [form, setForm] = useState({ email: "", pass: "" });
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -30,13 +30,11 @@ const Login = ({ onUserUpdate }) => {
       const res = await axios.post(`${API}/login`,{
         email:form.email,
         pass:form.pass
+      },{
+        withCredentials:true
       });
-      const data = res.data
-      if(data.token){
-        localStorage.setItem('token', data.token)
-        const userData = localStorage.setItem('user', JSON.stringify(data.user));
-        onUserUpdate(userData);
-        navigate("/");
+      if (res.data.success){
+        window.location.href = res.data.redirectUrl;
       }
     } catch (err) {
       console.log("Error While Loging in", err)

@@ -3,6 +3,7 @@ import { useNavigate, NavLink } from "react-router-dom";
 import { FaUserCircle, FaShoppingCart, FaBars, FaTimes } from "react-icons/fa";
 import { AiOutlineSearch } from "react-icons/ai";
 import "./navbar.css";
+import axios from "axios";
 
 const Navbar = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -16,13 +17,24 @@ const Navbar = () => {
   const searchInputRef = useRef(null);
   const [showSearch, setShowSearch] = useState(false);
 
+
+
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const userData = JSON.parse(localStorage.getItem("user"));
-    if (token) {
-      setIsLoggedIn(true);
-      setUser(userData);
+    const getUser = async() =>{
+      try {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/login/profile`,{
+          withCredentials:true
+        })
+        const userData = res.data
+        if (userData) {
+          setIsLoggedIn(true);
+          setUser(userData);
+        }
+      } catch (error) {
+        console.log(error)
+      }
     }
+    getUser(); 
 
     const handleClickOutside = (event) => {
       if (
@@ -67,12 +79,22 @@ const Navbar = () => {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setIsLoggedIn(false);
-    setShowProfileDropdown(false);
-    navigate("/login");
+  const handleLogout = async() => {
+    try {
+      const res = await axios.delete(`${process.env.REACT_APP_API_URL}/login`,{
+        withCredentials:true
+      })
+      if(res.status === 200) {
+        setIsLoggedIn(false);
+        setShowProfileDropdown(false);
+        navigate("/login");
+      }
+      else{
+        console.log("Problem Logging Out")
+      }
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   const toggleSearch = () => {

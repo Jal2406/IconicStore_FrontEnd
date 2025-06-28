@@ -11,10 +11,9 @@ const Wishlist = () => {
   useEffect(() => {
     const fetchWishlist = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get(`${API}/product/wishlist`, {
-          headers: { Authorization: token },
-        });
+        const res = await axios.get(`${API}/product/wishlist`,{
+        withCredentials:true
+    });
         setWishlist(res.data.products || []);
       } catch (err) {
         toast.error("Failed to load wishlist.");
@@ -28,11 +27,11 @@ const Wishlist = () => {
   // Remove from wishlist handler
   const handleRemoveFromWishlist = async (productId) => {
     try {
-      const token = localStorage.getItem("token");
       await axios.delete(`${API}/product/wishlist`, {
         data: { productId },
-        headers: { Authorization: token },
-      });
+      },{
+      withCredentials:true
+    });
       setWishlist((prev) => prev.filter((item) => (item.productId?._id || item._id) !== productId));
       toast.success("Removed from wishlist");
     } catch (err) {

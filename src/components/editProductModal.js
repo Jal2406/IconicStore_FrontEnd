@@ -75,11 +75,8 @@ const EditProductModal = ({ show, onClose, product, onSave, categories}) => {
         category: updatedProduct.category,
         price: updatedProduct.price
       },{
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `${localStorage.getItem('token')}`
-        }
-      }
+      withCredentials:true
+    }
     );
     
     console.log("Updated Product:", res.data);

@@ -49,10 +49,7 @@ const ProductCard = ({ product, onAddToCart, isWishlisted = false, onRemoveFromW
         `${API}/product/addTocart`,
         { productId: product._id },
         {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `${localStorage.getItem("token")}`,
-          },
+          withCredentials:true
         }
       );
       console.log("Response:", res.data);
@@ -76,24 +73,18 @@ const ProductCard = ({ product, onAddToCart, isWishlisted = false, onRemoveFromW
     if (newWishedStatus) {
       await axios.post(
         `${API}/product/wishlist`,
-        { productId: product._id },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `${localStorage.getItem("token")}`,
-          },
-        }
+        { productId: product._id },{
+      withCredentials:true
+    }
       );
     } else {
       await axios.delete(
         `${API}/product/wishlist`,
         {
           data: { productId: product._id },
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `${localStorage.getItem("token")}`,
-          },
-        }
+        },{
+      withCredentials:true
+    }
       );
     }
 

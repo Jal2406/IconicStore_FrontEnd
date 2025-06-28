@@ -1,43 +1,19 @@
-import React, { useState, useEffect } from "react";
+
 import { Navigate } from "react-router-dom";
-import axios from "axios";
-const API = process.env.REACT_APP_API_URL;
+import { toast } from "react-toastify";
+import { useAuth } from "../AuthContext";
 
-const PrivateAdminRoute = ({ children }) => {
-  const [loading, setLoading] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
+const AdminPrivateRoute = ({ children }) => {
+  const { role } = useAuth();
 
-  useEffect(() => {
-    const verifyAdmin = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          setIsAdmin(false);
-          setLoading(false);
-          return;
-        }
-
-        const response = await axios.get(`${API}/login/verify-admin`, {
-          headers: { Authorization: token },
-        });
-
-        setIsAdmin(response.data.isAdmin);
-      } catch (error) {
-        console.error("Admin verification failed:", error);
-        setIsAdmin(false);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    verifyAdmin();
-  }, []);
-
-  if (loading) {
-    return <div className="text-center my-5">Verifying access...</div>;
+  if (role !== "admin") {
+    toast.error("Access denied: Admins only");
+    console.log(role)
+    return <Navigate to="/" />;
   }
-
-  return isAdmin ? children : <Navigate to="/login" />;
+  
+  console.log(role)
+  return children;
 };
 
-export default PrivateAdminRoute;
+export default AdminPrivateRoute;

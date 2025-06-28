@@ -53,11 +53,9 @@ const fetchTopRatedItems = async () => {
 };
 const fetchOrderStats = async () => {
   // TODO: Replace with real API call
-  const res = await axios.get(`${API}/orders/states`, {
-    headers: {
-      Authorization: localStorage.getItem('token'),
-    },
-  })
+  const res = await axios.get(`${API}/orders/states`,{
+      withCredentials:true
+    })
   console.log(res.data);
   return {
     totalOrders: res.data.length,
@@ -65,7 +63,7 @@ const fetchOrderStats = async () => {
   };
 };
 const fetchCategoryWiseSelling = async () => {
-  // TODO: Replace with real API call
+  //TODO: Replace with real API call
   return [
     { category: "Shoes", sold: 150, icon: <FaTags className="text-indigo-600" /> },
     { category: "Watches", sold: 100, icon: <FaTags className="text-green-600" /> },

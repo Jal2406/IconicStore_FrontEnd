@@ -31,29 +31,25 @@ import CustomToaster from './components/CustomToast';
 import AdminDashboard from './page/admin/Dashboard';
 import ForgotPass from './page/forget-password';
 import ResetPassword from './page/reset-password';
+import axios from 'axios';
+import { useAuth } from './components/AuthContext';
 
 
 
 function App() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem("user")) || null;
-    } catch (err) {
-      console.error("Error parsing user:", err);
-      return null;
-    }
-  });
+  const {user, role} = useAuth();
+  
 
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
+  // useEffect(() => {
+  //   const AdminCheck = async () => {
+  //     const res = await axios.get(`${process.env.REACT_APP_API_URL}/login/verify-admin`)
+  //     setAdmin(res.data)
+  //   }
 
-    if (token) {
-      localStorage.setItem('token', token);
-      navigate('/'); // or wherever you want to send the user
-    }
-  }, []);
+  //   AdminCheck();
+  //   console.log(isAdmin)
+  // }, []);
 
   // Remove the old toasts state
   // const [toasts, setToasts] = useState([]);
@@ -117,19 +113,6 @@ addToast(`Added "${product.name}" to cart!`);
 const removeFromCart = (id) => {
   setCartItems((prevCart) => prevCart.filter((item) => item.id !== id));
 };
-
-const userJSON = localStorage.getItem("user");
-let role = null;
-
-if (userJSON) {
-  try {
-    const user = JSON.parse(userJSON);
-    role = user?.role || null;
-  } catch (err) {
-    console.error("Invalid JSON in localStorage for user", err);
-  }
-}
-
   return (
 
     <div className="d-flex flex-column min-vh-100">
@@ -137,8 +120,8 @@ if (userJSON) {
         <div className="flex-grow-1">
           <Routes>
             <Route path="/search" element={<SearchResults onAddToCart={addToCart} />} />
-            <Route index path="/login" element={<Login onUserUpdate={setUser} />} />
-            <Route path="/signup" element={<Signup onUserUpdate={setUser}/>} />
+            <Route index path="/login" element={<Login/>} />
+            <Route path="/signup" element={<Signup/>} />
             <Route path='/forgot-password' element={<ForgotPass/>}/>
             <Route path='/reset-password' element={<ResetPassword/>}/>
             <Route              
@@ -197,7 +180,7 @@ if (userJSON) {
               </PrivateAdminRoute>
             } />
             <Route path='/admin/users' element={
-              <PrivateAdminRoute>
+              <PrivateAdminRoute >
                 <AdminUserManagement/>
               </PrivateAdminRoute>
             } />

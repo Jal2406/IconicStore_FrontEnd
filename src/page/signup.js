@@ -51,13 +51,12 @@ const Signup = ({ onUserUpdate }) => {
       email,
       pass,
       role: form.role,
+    },{
+      withCredentials:true
     })
     const data = res.data;
-    if (data.token && data.role) {
-      localStorage.setItem('token', data.token);
-      const userData = localStorage.setItem('user', JSON.stringify(data.user));
-      onUserUpdate(userData);
-      navigate("/");
+    if (res.data.success) {
+      window.location.href = res.data.redirectUrl;
     } else {
       setError(data.message || "An error occurred during signup.");
     }

@@ -10,11 +10,10 @@ const AdminOrders = () => {
   const [loading, setLoading] = useState(true);
 
   const fetchOrders = async () => {
-    const token = localStorage.getItem("token");
     try {
-      const res = await axios.get(`${API}:3000/orders`, {
-        headers: { Authorization: `${token}` },
-      });
+      const res = await axios.get(`${API}/orders`,{
+      withCredentials:true
+    });
       setOrders(res.data);
     } catch (err) {
       toast.error("Failed to fetch orders.");
@@ -25,21 +24,16 @@ const AdminOrders = () => {
   };
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (!user || user.role !== "admin") {
-      toast.error("Access denied. Admins only.");
-      return;
-    }
     fetchOrders();
   }, []);
 
   const handleStatusChange = async (orderId, newStatus) => {
-    const token = localStorage.getItem("token");
     try {
       await axios.put(
-        `${API}/${orderId}/status`,
-        { status: newStatus },
-        { headers: { Authorization: `${token}` } }
+        `${API}/orders/${orderId}/status`,
+        { status: newStatus },{
+      withCredentials:true
+    }
       );
       toast.success("Order status updated.");
       fetchOrders();

@@ -16,10 +16,9 @@ const MyAccount = () => {
 
   const fetchProfile = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const res = await axios.get(`${API}/login/profile`, {
-        headers: { Authorization: token },
-      });
+      const res = await axios.get(`${API}/login/profile`,{
+      withCredentials:true
+    });
       setForm({
         fname: res.data.fname,
         lname: res.data.lname,
@@ -55,10 +54,9 @@ const MyAccount = () => {
   const handleSave = async (e) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem("token");
-      await axios.put(`${API}/login/profile`, form, {
-        headers: { Authorization: token },
-      });
+      await axios.put(`${API}/login/profile`, form,{
+      withCredentials:true
+    });
       toast.success("Profile updated");
       setEditMode(false);
       fetchProfile(); // Refetch profile after save
@@ -78,13 +76,12 @@ const MyAccount = () => {
       return;
     }
     try {
-      const token = localStorage.getItem("token");
       await axios.put(`${API}/login/change-password`, {
         oldPass: passwords.oldPass,
         newPass: passwords.newPass,
-      }, {
-        headers: { Authorization: token },
-      });
+      },{
+      withCredentials:true
+    });
       toast.success("Password updated");
       setPasswords({ oldPass: "", newPass: "", confirmPass: "" });
       setShowPasswordForm(false);
