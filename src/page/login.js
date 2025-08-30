@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Cookie } from "lucide-react";
 const API = process.env.REACT_APP_API_URL;
 
 
@@ -31,7 +32,8 @@ const Login = () => {
         email:form.email,
         pass:form.pass
       },{
-        withCredentials:true
+        withCredentials:true,
+        
       });
       if (res.data.success){
         window.location.href = res.data.redirectUrl;

@@ -17,10 +17,10 @@ const Orders = () => {
         try {
             setLoading(true);
             const res = await axios.get(`${API}/orders/userOrders`,{
-      withCredentials:true
+            withCredentials:true    
     });
             setOrders(res.data);
-            console.log(res.data)
+            // console.log(res.data)
             setError(null);
         } catch (err) {
             setError("Failed to fetch orders. Please try again later.");
@@ -35,6 +35,7 @@ const Orders = () => {
     }, []);
 
     // Filter logic
+    // console.log(orders)
     const liveOrders = orders.filter(o => o.status === "pending" || o.status === "shipped");
     const historyOrders = orders.filter(o => o.status === "delivered" || o.status === "cancelled");
 

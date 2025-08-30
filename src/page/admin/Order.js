@@ -27,6 +27,8 @@ const AdminOrders = () => {
     fetchOrders();
   }, []);
 
+  const filteredOrder = orders.filter(o => o.status !== 'delivered')
+
   const handleStatusChange = async (orderId, newStatus) => {
     try {
       await axios.put(
@@ -65,7 +67,7 @@ const AdminOrders = () => {
               </tr>
             </thead>
             <tbody>
-              {orders.map((order) => (
+              {filteredOrder.map((order) => (
                 <tr key={order._id}>
                   <td>{order._id}</td>
                   <td>{order.userId?.email || "Unknown"}</td>
